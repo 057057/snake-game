@@ -1,34 +1,31 @@
-from distutils.command.build_py import build_py
+
 from random import randrange
 
 
 num=10 #board size=num*nmum
 
 def row():
-  # make row with num of '.'
+  # make row list with num of '.'
   row=[]
   for i in range (num):
       row.append ('.')
   return row
 
 def board():
-  board=[]
-  # make board with num of row
-  for i in range (num):
-      board.append (row())
-  return board
+    # make board metrix with num of row and built the wall at row 0 and column 0
+    board=[]
+    for i in range (num):
+        board.append (row())
+    for i in range(num):
+        board[i][0]='|'
+    for i in range(num):
+        board[i][-1]='|'
+    for j in range(num):
+        board[0][j]='-'
+    for j in range(num):
+        board[-1][j]='-'
+    return board
 
-def wall():
-    ground=board()
-    for i in range(num):
-        ground[i][0]='|'
-    for i in range(num):
-        ground[i][-1]='|'
-    for j in range(num):
-        ground[0][j]='-'
-    for j in range(num):
-        ground[-1][j]='-'
-    return ground
 
 def food():
     food_y=randrange(1,num-1)
@@ -135,18 +132,16 @@ game_on=True
 game_over=False
 
 #main code
-ground=wall()
+ground=board()
 ground[1][1]='S'
 food()
 display_board()
 y,x=find('S')
-food_x,food_y=find_food('O')
-print(food_x,food_y)
+food_y,food_x=find_food('O')
 while True:
     user_mv=input('type "e":move right; "w":move left; "n":move up; "s":move down')
     snake_mv()
     while ate_food_num()>0:
-        food()
         snake_bd_mv()
     if x==0 or x==num-1 or y==0 or y==num-1:
         break
